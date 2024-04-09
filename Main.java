@@ -13,14 +13,14 @@ public class Main {
         // jFrame.setLocation(850, 200);
         // jFrame.setVisible(true);
 
-        MyJFrame jFrame1 = new MyJFrame("Testing the GUI");
+        //MyJFrame jFrame1 = new MyJFrame("Testing the GUI");
         
-        JPanel jPanel = new JPanel();
+      //  JPanel jPanel = new JPanel();
         //jPanel.add(new JButton());
 
         
         //MyJFrame jFrame2 = new MyJFrame();
-
+        TicTacToeGame ticTacToeGame = new TicTacToeGame();
         
     }
 }
