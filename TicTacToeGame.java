@@ -1,10 +1,13 @@
 package GUI_practice;
 
 import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.*;
 
 public class TicTacToeGame extends MyJFrame {
     
@@ -13,12 +16,23 @@ public class TicTacToeGame extends MyJFrame {
     int ROWS = 3, COLUMNS = 3;
     String currentPlayer = "x";
     Font font;
-
+    JMenuBar menuBar;
+    JMenu menu;
+    JMenuItem resetGameItem;
 
     //Constructor has no parameters
     public TicTacToeGame() {
         //call the parent classes constructor and pass in a title 
         super("Tic Tac Toe Game");
+
+        menuBar = new JMenuBar(); // create the menu bar
+        menu = new JMenu("Game options"); // create the menu
+        resetGameItem = new JMenuItem("Reset game"); //create the menu item 
+        resetGameItem.addActionListener(e -> ResetGame()); // this registers a listener that will listen for clicks on this button 
+
+        menu.add(resetGameItem); // add the menu item to the game
+        menuBar.add(menu); // add the menu to the menu bar
+        setJMenuBar(menuBar); // add the menu bar to the JFrame
 
         jPanel = new JPanel(); // needs to be instantiated
         //jPanel.setLayout(new BorderLayout());
@@ -45,23 +59,56 @@ public class TicTacToeGame extends MyJFrame {
         setVisible(true);
     }
 
+    /**
+     * Will reset the game. This involves resetting who the current player is
+     * and resetting the text, color, and enabled status of each button.
+     */
+    public void ResetGame() {
+        currentPlayer = "x";
+        for(int i = 0; i < buttons.size(); i++) {
+            JButton btn = buttons.get(i);
+            btn.setText("");
+            btn.setBackground(null);
+            btn.setEnabled(true);
+        }
+    }
+
     public void ButtonClicked(ActionEvent event) {
 
 
         JButton btnClicked = ((JButton)event.getSource());
         btnClicked.setText(currentPlayer);
-        btnClicked.setEnabled(false);
-
+        //btnClicked.setEnabled(false);
+        
         if(currentPlayer == "x") {
-            currentPlayer = "o";
             btnClicked.setBackground(Color.RED);
         } else {
-            currentPlayer = "x";
             btnClicked.setBackground(Color.GREEN);
         }
+        
+        boolean winnerFound = CheckWinner();
+
+        if(winnerFound) {
+            JOptionPane.showMessageDialog(null, currentPlayer + " has won the game!");
+        
+            for(int i = 0; i < buttons.size(); i++) {
+                buttons.get(i).setEnabled(false);
+            }
+        }
+        System.out.println(winnerFound);
+
+        SwitchPlayer();
     }
 
-    public void CheckWinner() {
+    public void SwitchPlayer() {
+        if(currentPlayer == "x") {
+            currentPlayer = "o";
+        } else {
+            currentPlayer = "x";
+        } 
+    }
+
+    public boolean CheckWinner() {
 
         // first row
         if(buttons.get(0).getText().equals(currentPlayer) && buttons.get(1).getText().equals(currentPlayer) && buttons.get(2).getText().equals(currentPlayer)) {
