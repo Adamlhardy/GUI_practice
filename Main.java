@@ -1,3 +1,5 @@
+//Name: Adam Hardy
+
 package GUI_practice;
 import javax.swing.JButton;
 import javax.swing.JFrame;

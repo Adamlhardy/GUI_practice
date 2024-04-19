@@ -1,3 +1,4 @@
+// Name: Adam Hardy
 package GUI_practice;
 
 import java.awt.*;
