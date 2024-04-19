@@ -1,15 +1,15 @@
 package GUI_practice;
 
-import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class TicTacToeGame extends MyJFrame {
+
+    // Variables to keep track of winner count 
+    int xWon = 0;
+    int oWon = 0;
     
     JPanel jPanel; // we want this to be accessible throughout the class
     ArrayList<JButton> buttons = new ArrayList<JButton>();
@@ -18,6 +18,7 @@ public class TicTacToeGame extends MyJFrame {
     Font font;
     JMenuBar menuBar;
     JMenu menu;
+    JMenu score;
     JMenuItem resetGameItem;
 
     //Constructor has no parameters
@@ -27,11 +28,13 @@ public class TicTacToeGame extends MyJFrame {
 
         menuBar = new JMenuBar(); // create the menu bar
         menu = new JMenu("Game options"); // create the menu
+        score = new JMenu("Score");
         resetGameItem = new JMenuItem("Reset game"); //create the menu item 
         resetGameItem.addActionListener(e -> ResetGame()); // this registers a listener that will listen for clicks on this button 
 
         menu.add(resetGameItem); // add the menu item to the game
         menuBar.add(menu); // add the menu to the menu bar
+        menuBar.add(score); // add the score to the menu bar
         setJMenuBar(menuBar); // add the menu bar to the JFrame
 
         jPanel = new JPanel(); // needs to be instantiated
@@ -88,18 +91,54 @@ public class TicTacToeGame extends MyJFrame {
         
         boolean winnerFound = CheckWinner();
 
+        boolean allButtonsClicked = true;
+        for (JButton button : buttons) { 
+            if (button.getText().isEmpty()) {
+                allButtonsClicked = false;
+                break;
+            }
+        }
+        
+        // Increments winner count when player x or player o wins 
         if(winnerFound) {
+            if(currentPlayer == "x") {
+                xWon++;
+            } else {
+                oWon++;
+            }
+
+            // Updates and displays the new winner record
+            updateWinTracker();
             JOptionPane.showMessageDialog(null, currentPlayer + " has won the game!");
         
+            // Disables buttons as the game is played
+            for(int i = 0; i < buttons.size(); i++) {
+                buttons.get(i).setEnabled(false);
+            }
+
+        // Else if option for tied game    
+        } else if (allButtonsClicked) {
+            // Display message for a tied match.
+            JOptionPane.showMessageDialog(null, "It's a tie!");
+
+            // Disables buttons as the game is played
             for(int i = 0; i < buttons.size(); i++) {
                 buttons.get(i).setEnabled(false);
             }
         }
+        
         System.out.println(winnerFound);
-
+        
         SwitchPlayer();
+        
     }
 
+    // win tracker function to update and display wins record for each player 
+    private void updateWinTracker() {
+        score.setText("Score - X Wins: " + xWon + ", O Wins: " + oWon);
+    }
+
+    // Allows current player to switch after each turn
     public void SwitchPlayer() {
         if(currentPlayer == "x") {
             currentPlayer = "o";
@@ -153,4 +192,6 @@ public class TicTacToeGame extends MyJFrame {
         
         return false;
     }
+
+    
 }
